@@ -5,18 +5,19 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-chi/render"
+
+	"github.com/denichodev/rest-api-mongo/db"
+	"github.com/denichodev/rest-api-mongo/repository"
+
+	"github.com/denichodev/rest-api-mongo/service"
 	"github.com/go-chi/chi"
 )
 
 func CreateRouter() chi.Router {
 	r := chi.NewRouter()
 
-	r.Use(func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Add("Content-Type", "application/json")
-			next.ServeHTTP(w, r)
-		})
-	})
+	r.Use(render.SetContentType(render.ContentTypeJSON))
 
 	r.Get("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		payload := map[string]string{
@@ -31,6 +32,13 @@ func CreateRouter() chi.Router {
 
 		w.Write(res)
 	}))
+
+	dbConn := db.Get()
+
+	todoService := service.NewTodoService(repository.NewTodoRepository(dbConn.Database("test-go")))
+	todoHandler := NewTodoHandler(todoService)
+
+	r.Mount("/todo", todoHandler.GetRoutes())
 
 	return r
 }
