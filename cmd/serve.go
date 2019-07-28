@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"net/http"
 
-	appHttp "github.com/denichodev/rest-api-mongo/http"
+	"github.com/denichodev/rest-api-mongo/handler"
 	"github.com/spf13/cobra"
 )
 
@@ -37,9 +37,9 @@ to quickly create a Cobra application.`,
 }
 
 func run(*cobra.Command, []string) {
-	router := appHttp.CreateRouter()
+	router := handler.CreateRouter()
 
-	fmt.Println("App running on port 8080")
+	fmt.Println("App running on port 3030")
 	http.ListenAndServe(":3030", router)
 }
 
