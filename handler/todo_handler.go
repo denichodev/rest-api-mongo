@@ -17,6 +17,7 @@ func (h *TodoHandler) GetRoutes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Post("/", h.Store)
+	r.Get("/", h.Get)
 
 	return r
 }
@@ -40,13 +41,27 @@ func (h *TodoHandler) Store(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	render.Render(w, r, &object.TodoCreatedResponse{
+	render.Render(w, r, &SuccessResponse{
+		HTTPStatusCode: http.StatusCreated,
 		Data: object.TodoResponse{
 			ID:      todo.ID,
 			Text:    todo.Text,
 			Done:    todo.Done,
 			Created: todo.Created.Format("2006-01-02 15:04:05"),
 		},
-		Status: "success",
+	})
+}
+
+func (h *TodoHandler) Get(w http.ResponseWriter, r *http.Request) {
+	todos, err := h.todoService.Get()
+
+	if err != nil {
+		render.Render(w, r, createInternalServerErrorResponse(err.Error()))
+		return
+	}
+
+	render.Render(w, r, &SuccessResponse{
+		HTTPStatusCode: http.StatusOK,
+		Data:           todos,
 	})
 }

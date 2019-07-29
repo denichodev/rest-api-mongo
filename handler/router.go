@@ -35,7 +35,7 @@ func CreateRouter() chi.Router {
 
 	dbConn := db.Get()
 
-	todoService := service.NewTodoService(repository.NewTodoRepository(dbConn.Database("test-go")))
+	todoService := service.NewTodoService(repository.NewTodoRepository(dbConn.Database("todo-go")))
 	todoHandler := NewTodoHandler(todoService)
 
 	r.Mount("/todo", todoHandler.GetRoutes())

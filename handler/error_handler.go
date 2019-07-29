@@ -47,7 +47,7 @@ func createUnprocessableEntityResponse(message string) *errorResponse {
 
 func createInternalServerErrorResponse(message string) *errorResponse {
 	if message == "" {
-		message = "Internal server errro"
+		message = "Internal server error"
 	}
 
 	return &errorResponse{

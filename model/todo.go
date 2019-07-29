@@ -1,11 +1,13 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type Todo struct {
 	ID      string
-	Text    string
-	Done    bool
-	Created time.Time
-	Deleted time.Time
+	Text    string    `bson:"text"`
+	Done    bool      `bson:"done"`
+	Created time.Time `bson:"created"`
+	Deleted time.Time `bson:"deleted"`
 }

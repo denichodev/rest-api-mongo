@@ -24,3 +24,13 @@ func (s *TodoService) Create(text string) (model.Todo, error) {
 
 	return payload, nil
 }
+
+func (s *TodoService) Get() ([]model.Todo, error) {
+	payload, err := s.repository.Get()
+
+	if err != nil {
+		return []model.Todo{}, err
+	}
+
+	return payload, nil
+}
